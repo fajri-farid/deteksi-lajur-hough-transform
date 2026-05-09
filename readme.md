@@ -107,6 +107,56 @@ Program memproses setiap frame video dengan tahapan berikut:
 11. Menggambar hasil deteksi pada frame video.
 12. Menyimpan frame hasil ke video output.
 
+### Flowchart
+
+```mermaid
+flowchart LR
+    A([Mulai]) --> B[Siapkan video.mp4]
+    B --> C[Inisialisasi VideoReader<br/>dan VideoWriter]
+    C --> D{Masih ada frame?}
+
+    D -- Ya --> E
+
+    subgraph P1[Preprocessing Frame]
+        direction TB
+        E[Baca frame] --> F[RGB ke grayscale]
+        F --> G[Gaussian blur]
+        G --> H[Canny edge detection]
+    end
+
+    subgraph P2[Deteksi Area Jalan]
+        direction TB
+        I[Buat ROI] --> J[Ambil edge<br/>di dalam ROI]
+    end
+
+    subgraph P3[Deteksi dan Fitting Garis]
+        direction TB
+        K[Hough Transform] --> L[Hough peaks<br/>dan Hough lines]
+        L --> M[Filter garis<br/>berdasarkan sudut]
+        M --> N[Pisahkan garis<br/>kiri dan kanan]
+        N --> O[Fitting garis jalur]
+    end
+
+    subgraph P4[Output Per Frame]
+        direction TB
+        P[Stabilisasi garis<br/>dengan smoothing] --> Q[Gambar garis<br/>dan area jalur]
+        Q --> R[Simpan frame<br/>ke video output]
+        R --> S{Frame contoh?}
+        S -- Ya --> T[Simpan panel proses<br/>ke PNG]
+        S -- Tidak --> U[Lanjut frame berikutnya]
+        T --> U
+    end
+
+    H --> I
+    J --> K
+    O --> P
+    U --> D
+
+    D -- Tidak --> V[Tutup VideoWriter]
+    V --> W[video_lane_output.mp4<br/>proses_1_frame_lane_detection.png]
+    W --> X([Selesai])
+```
+
 ## Parameter Penting
 
 Parameter utama dapat diubah pada bagian `PARAMETER DETEKSI` dan `PARAMETER ROI` di dalam `code.m`.
