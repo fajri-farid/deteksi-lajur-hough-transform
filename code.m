@@ -4,7 +4,7 @@ clc; clear; close all;
 %% FILE
 %% =============================================================
 inputVideo  = 'video.mp4';
-outputVideo = 'video_lane_output.mp4';
+outputVideo = 'video_lane_output-test.mp4';
 
 % Pilih frame ke berapa yang mau dijadikan contoh alur proses
 frameNumber = 30;
@@ -24,31 +24,33 @@ showProcessFigure = true;
 %% =============================================================
 %% PARAMETER DETEKSI
 %% =============================================================
-param.minAngle = 25;
-param.maxAngle = 80;
-param.numPeaks = 20;
-param.houghThresh = 0.30;
-param.fillGap = 500;
-param.minLength = 25;
-param.roiTopRatio = 0.75;
+param.minAngle = 25; % seberapa curam sebuah garis agar dianggap sebagai kandidat lane (dalam derajat)
+param.maxAngle = 80; % seberapa curam sebuah garis agar dianggap sebagai kandidat lane (dalam derajat)
+param.numPeaks = 20; % berapa banyak kandidat garis yang dipertimbangkan
+param.houghThresh = 0.30; % seberapa kuat sebuah garis agar dianggap valid
+param.fillGap = 500; % menyambungkan garis terputus
+param.minLength = 25; % panjang minimum garis valid
+param.roiTopRatio = 0.75; % seberapa tinggi area jalan yang akan di masking
 
 %% =============================================================
 %% PARAMETER ROI
+%% mengatur bentuk ROI pada area jalan
 %% =============================================================
-param.bottomLeftRatio  = 0.22;
-param.bottomRightRatio = 0.95;
-param.topLeftRatio     = 0.45;
-param.topRightRatio    = 0.62;
+param.bottomLeftRatio  = 0.22; % seberapa lebar area jalan di bagian bawah kiri
+param.bottomRightRatio = 0.95; % seberapa lebar area jalan di bagian bawah kanan
+param.topLeftRatio     = 0.45; % seberapa lebar area jalan di bagian atas kiri
+param.topRightRatio    = 0.62; % seberapa lebar area jalan di bagian atas kanan
 
 %% =============================================================
 %% STABILIZER
+%% Menstabilkan garis lane antar-frame, supaya garis tidak berkedip, hilang-muncul, atau lompat-lompat.
 %% =============================================================
-prevL = [];
+prevL = []; % simpan posisi garis sebelumnya
 prevR = [];
-missL = 0;
+missL = 0; % hitung berapa kali garis tidak terdeteksi
 missR = 0;
 maxMiss = 8;
-alpha = 0.25;
+alpha = 0.25; % bobot untuk smoothing posisi garis: 0 = sangat halus tapi lambat mengikuti perubahan, 1 = tidak halus sama sekali
 
 %% =============================================================
 %% VIDEO READER DAN WRITER
