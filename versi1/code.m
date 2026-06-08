@@ -3,8 +3,8 @@ clc; clear; close all;
 %% =============================================================
 %% FILE
 %% =============================================================
-inputVideo  = 'video.mp4';
-outputVideo = 'video_lane_output-test.mp4';
+inputVideo  = '../input/video.mp4';
+outputVideo = 'video_lane_output.mp4';
 
 % Pilih frame ke berapa yang mau dijadikan contoh alur proses
 frameNumber = 30;
