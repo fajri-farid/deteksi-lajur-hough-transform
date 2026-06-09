@@ -1,225 +1,104 @@
-# Deteksi Jalur Jalan pada Video Menggunakan MATLAB
+# Versi 1 - Deteksi Jalur Jalan Menggunakan MATLAB
 
-Proyek ini berisi implementasi deteksi jalur jalan (*lane detection*) pada video menggunakan MATLAB. Program membaca video input, mendeteksi garis marka jalan pada setiap frame, menstabilkan hasil deteksi agar tidak mudah berkedip, lalu menyimpan video output beserta gambar panel proses untuk satu frame contoh.
+Folder `versi1/` berisi implementasi awal deteksi jalur jalan pada video. Versi ini menjadi baseline untuk membaca video, melakukan preprocessing citra, mendeteksi tepi, membatasi area jalan dengan ROI, mencari garis marka menggunakan Hough Transform, lalu menggambar hasil deteksi pada video output.
 
 ## Fitur Utama
 
 - Membaca video input menggunakan `VideoReader`.
-- Mengubah frame RGB ke grayscale.
+- Melakukan konversi RGB ke grayscale.
 - Mengurangi noise menggunakan Gaussian blur.
-- Mendeteksi tepi menggunakan metode Canny.
-- Membatasi area pemrosesan dengan Region of Interest (ROI).
+- Mendeteksi tepi menggunakan Canny edge detection.
+- Membatasi area deteksi dengan Region of Interest (ROI).
 - Mendeteksi kandidat garis menggunakan Hough Transform.
-- Memisahkan garis jalur kiri dan kanan berdasarkan kemiringan.
-- Melakukan fitting garis agar hasil deteksi lebih rapi.
-- Menambahkan stabilizer untuk mengurangi efek garis muncul-hilang antar frame.
-- Menyimpan hasil akhir dalam bentuk video `.mp4`.
-- Menyimpan panel visualisasi alur proses untuk satu frame.
+- Memisahkan kandidat garis kiri dan kanan berdasarkan kemiringan.
+- Melakukan fitting garis agar garis jalur lebih utuh.
+- Menstabilkan hasil antar-frame menggunakan smoothing.
+- Menyimpan video hasil deteksi.
+- Menyimpan gambar panel proses untuk 1 frame contoh.
 
 ## Struktur File
 
 | File | Keterangan |
 | --- | --- |
-| `code.m` | Program utama deteksi jalur jalan. |
-| `input/video.mp4` | Video input yang akan diproses. File ini tidak disertakan di repository karena masuk `.gitignore`. |
-| `video_lane_output.mp4` | Video hasil deteksi jalur. File ini akan dibuat setelah program dijalankan dan tidak disertakan di repository. |
-| `proses_1_frame_lane_detection.png` | Gambar panel tahapan proses pada satu frame. |
-| `README.md` | Dokumentasi proyek. |
+| `code.m` | Program utama versi 1. |
+| `README.md` | Dokumentasi versi 1. |
+| `video_lane_output.mp4` sampai `video_lane_output4.mp4` | Video output hasil deteksi untuk masing-masing input. |
+| `proses_1_frame_lane_detection.png` sampai `proses_1_frame_lane_detection4.png` | Gambar panel proses untuk masing-masing input. |
 
-## Contoh Video
+## Link Output
 
-Pada contoh kasus proyek ini, video input dan video output dapat dilihat melalui tautan berikut:
+Semua output versi 1 dapat diakses melalui folder berikut:
 
-| Jenis Video | Tautan |
-| --- | --- |
-| Video input | [Google Drive - video.mp4](https://drive.google.com/file/d/1mJj8Vhi2tczT316UMwXE_9T9-mGWTJaL/view?usp=sharing) |
-| Video output | [Google Drive - video_lane_output.mp4](https://drive.google.com/file/d/1vru8lWypsxkBeOKi1gVeVgc0XKkHm6er/view?usp=sharing) |
+[Google Drive - Folder Output Versi 1](https://drive.google.com/drive/folders/1sjeogVMn7aGsiEwn2Ka0itiA0YuepOFg?usp=sharing)
 
-## Kebutuhan Sistem
+## Pasangan Input dan Output
 
-Program ini dijalankan menggunakan MATLAB dan membutuhkan toolbox berikut:
+| Input | Video output | Panel proses |
+| --- | --- | --- |
+| `../input/video.mp4` | `video_lane_output.mp4` | `proses_1_frame_lane_detection.png` |
+| `../input/video2.mp4` | `video_lane_output2.mp4` | `proses_1_frame_lane_detection2.png` |
+| `../input/video3.mp4` | `video_lane_output3.mp4` | `proses_1_frame_lane_detection3.png` |
+| `../input/video4.mp4` | `video_lane_output4.mp4` | `proses_1_frame_lane_detection4.png` |
 
-- Image Processing Toolbox
-- Computer Vision Toolbox
+## Cara Menjalankan
 
-Beberapa fungsi yang digunakan antara lain:
-
-- `VideoReader`
-- `VideoWriter`
-- `rgb2gray`
-- `imgaussfilt`
-- `edge`
-- `poly2mask`
-- `hough`
-- `houghpeaks`
-- `houghlines`
-- `insertShape`
-- `exportgraphics`
-
-## Cara Menjalankan Program
-
-1. Siapkan file video input dengan nama `video.mp4` di folder `input/`.
+1. Pastikan video input sudah tersedia di folder `input/`.
 2. Buka MATLAB.
-3. Arahkan *Current Folder* MATLAB ke folder `versi1/` ini.
-4. Jalankan file:
+3. Arahkan *Current Folder* ke folder `versi1/`.
+4. Sesuaikan bagian awal `code.m` sesuai video yang ingin diproses:
+
+```matlab
+inputVideo  = '../input/video4.mp4';
+outputVideo = 'video_lane_output4.mp4';
+outputImage = 'proses_1_frame_lane_detection4.png';
+```
+
+5. Jalankan:
 
 ```matlab
 code
 ```
 
-Setelah program selesai, MATLAB akan menampilkan pesan seperti berikut:
-
-```text
-Selesai!
-Video output disimpan sebagai: video_lane_output.mp4
-Panel proses 1 frame disimpan sebagai: proses_1_frame_lane_detection.png
-```
-
-## Output Program
-
-Program menghasilkan dua file utama di folder `versi1/`:
-
-| Output | Keterangan |
-| --- | --- |
-| `video_lane_output.mp4` | Video dengan garis deteksi jalur kiri dan kanan. |
-| `proses_1_frame_lane_detection.png` | Panel berisi tahapan pemrosesan untuk satu frame contoh. |
-
-Pada video output:
-
-- Garis biru menunjukkan jalur kiri.
-- Garis merah menunjukkan jalur kanan.
-- Area hijau transparan menunjukkan area jalur yang berhasil dideteksi.
+Setelah selesai, program akan menyimpan video output dan gambar panel proses di folder `versi1/`.
 
 ## Alur Pemrosesan
 
-Program memproses setiap frame video dengan tahapan berikut:
-
-1. Mengambil frame asli dari video.
-2. Mengubah frame RGB menjadi grayscale.
-3. Menerapkan Gaussian blur untuk mengurangi noise.
-4. Mendeteksi tepi menggunakan Canny edge detection.
-5. Membuat ROI agar deteksi hanya fokus pada area jalan.
-6. Menerapkan Hough Transform untuk mencari kandidat garis.
-7. Memfilter garis berdasarkan sudut dan arah kemiringan.
-8. Memisahkan garis kiri dan kanan.
-9. Melakukan fitting garis untuk membentuk garis jalur yang utuh.
-10. Menstabilkan garis antar frame menggunakan metode smoothing.
-11. Menggambar hasil deteksi pada frame video.
-12. Menyimpan frame hasil ke video output.
-
-### Flowchart
-
-```mermaid
-flowchart LR
-    A([Mulai]) --> B[Siapkan input/video.mp4]
-    B --> C[Inisialisasi VideoReader<br/>dan VideoWriter]
-    C --> D{Masih ada frame?}
-
-    D -- Ya --> E
-
-    subgraph P1[Preprocessing Frame]
-        direction TB
-        E[Baca frame] --> F[RGB ke grayscale]
-        F --> G[Gaussian blur]
-        G --> H[Canny edge detection]
-    end
-
-    subgraph P2[Deteksi Area Jalan]
-        direction TB
-        I[Buat ROI] --> J[Ambil edge<br/>di dalam ROI]
-    end
-
-    subgraph P3[Deteksi dan Fitting Garis]
-        direction TB
-        K[Hough Transform] --> L[Hough peaks<br/>dan Hough lines]
-        L --> M[Filter garis<br/>berdasarkan sudut]
-        M --> N[Pisahkan garis<br/>kiri dan kanan]
-        N --> O[Fitting garis jalur]
-    end
-
-    subgraph P4[Output Per Frame]
-        direction TB
-        P[Stabilisasi garis<br/>dengan smoothing] --> Q[Gambar garis<br/>dan area jalur]
-        Q --> R[Simpan frame<br/>ke video output]
-        R --> S{Frame contoh?}
-        S -- Ya --> T[Simpan panel proses<br/>ke PNG]
-        S -- Tidak --> U[Lanjut frame berikutnya]
-        T --> U
-    end
-
-    H --> I
-    J --> K
-    O --> P
-    U --> D
-
-    D -- Tidak --> V[Tutup VideoWriter]
-    V --> W[video_lane_output.mp4<br/>proses_1_frame_lane_detection.png]
-    W --> X([Selesai])
-```
+1. Membaca frame dari video input.
+2. Mengubah frame ke grayscale.
+3. Menerapkan Gaussian blur.
+4. Mendeteksi tepi dengan Canny.
+5. Membentuk ROI pada area jalan.
+6. Mengambil edge hanya pada area ROI.
+7. Menerapkan Hough Transform.
+8. Memfilter garis berdasarkan sudut.
+9. Memisahkan garis kiri dan kanan.
+10. Melakukan fitting garis.
+11. Menstabilkan hasil deteksi antar-frame.
+12. Menggambar garis kiri, garis kanan, dan area jalur.
+13. Menyimpan frame ke video output.
 
 ## Parameter Penting
 
-Parameter utama dapat diubah pada bagian `PARAMETER DETEKSI` dan `PARAMETER ROI` di dalam `code.m`.
-
-### Parameter Deteksi
-
 | Parameter | Fungsi |
 | --- | --- |
-| `param.minAngle` | Sudut minimum garis yang dianggap valid. |
-| `param.maxAngle` | Sudut maksimum garis yang dianggap valid. |
-| `param.numPeaks` | Jumlah puncak maksimum pada Hough Transform. |
-| `param.houghThresh` | Ambang batas puncak Hough. |
-| `param.fillGap` | Jarak maksimum untuk menggabungkan segmen garis. |
+| `param.minAngle` dan `param.maxAngle` | Rentang sudut garis yang dianggap valid sebagai kandidat jalur. |
+| `param.numPeaks` | Jumlah kandidat puncak Hough yang diproses. |
+| `param.houghThresh` | Ambang kekuatan kandidat garis pada Hough Transform. |
+| `param.fillGap` | Jarak maksimum untuk menyambungkan segmen garis. |
 | `param.minLength` | Panjang minimum garis yang diterima. |
 | `param.roiTopRatio` | Posisi batas atas ROI terhadap tinggi frame. |
+| `param.bottomLeftRatio`, `param.bottomRightRatio`, `param.topLeftRatio`, `param.topRightRatio` | Bentuk ROI pada area jalan. |
 
-### Parameter ROI
+## Output Visual
 
-| Parameter | Fungsi |
-| --- | --- |
-| `param.bottomLeftRatio` | Posisi titik kiri bawah ROI terhadap lebar frame. |
-| `param.bottomRightRatio` | Posisi titik kanan bawah ROI terhadap lebar frame. |
-| `param.topLeftRatio` | Posisi titik kiri atas ROI terhadap lebar frame. |
-| `param.topRightRatio` | Posisi titik kanan atas ROI terhadap lebar frame. |
+Pada video hasil deteksi:
 
-## Pengaturan Tampilan
-
-Program menyediakan dua opsi tampilan:
-
-```matlab
-showVideoPreview = true;
-showProcessFigure = true;
-```
-
-Keterangan:
-
-- `showVideoPreview = true` menampilkan video hasil deteksi secara langsung saat proses berjalan.
-- `showProcessFigure = true` menampilkan panel tahapan proses untuk satu frame.
-- Jika ingin menjalankan program tanpa membuka jendela visualisasi, ubah nilainya menjadi `false`.
-
-## Mengganti Frame Contoh
-
-Panel proses hanya dibuat untuk satu frame tertentu. Nomor frame dapat diubah pada variabel berikut:
-
-```matlab
-frameNumber = 30;
-```
-
-Jika nilai frame melebihi jumlah frame video, program akan otomatis menyesuaikannya ke frame terakhir yang tersedia.
-
-## Fungsi dalam Program
-
-| Fungsi | Keterangan |
-| --- | --- |
-| `processLaneFrame` | Memproses satu frame video hingga mendapatkan kandidat garis jalur. |
-| `saveProcessPanel` | Membuat dan menyimpan panel visualisasi tahapan proses. |
-| `fitLine` | Melakukan fitting garis dari kumpulan titik hasil Hough Transform. |
-| `smoothLine` | Menstabilkan garis antar frame agar tidak mudah berkedip. |
-| `drawLane` | Menggambar garis kiri, garis kanan, dan area jalur pada frame. |
+- Garis biru menunjukkan jalur kiri.
+- Garis merah menunjukkan jalur kanan.
+- Area hijau transparan menunjukkan area jalur yang terdeteksi.
 
 ## Catatan
 
-- Akurasi deteksi sangat dipengaruhi oleh kualitas video, pencahayaan, warna marka jalan, dan posisi kamera.
-- Jika garis tidak terdeteksi dengan baik, sesuaikan parameter ROI dan deteksi Hough pada `code.m`.
-- File `input/video.mp4`, `video_lane_output.mp4`, dan `proses_1_frame_lane_detection.png` sengaja tidak diikutsertakan ke repository GitHub karena ukuran file bisa besar.
-- Program ini cocok digunakan sebagai contoh praktikum pengolahan citra digital, khususnya pada topik deteksi tepi, ROI, Hough Transform, dan pemrosesan video.
+- Versi 1 efektif sebagai baseline, tetapi masih sensitif terhadap perubahan pencahayaan, warna marka, tikungan, dan garis marka yang terputus.
+- Jika deteksi kurang stabil, parameter ROI dan Hough Transform dapat disesuaikan di `code.m`.
+- Untuk peningkatan metode dan output debug yang lebih lengkap, lihat dokumentasi `versi2/`.

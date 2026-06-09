@@ -3,14 +3,14 @@ clc; clear; close all;
 %% =============================================================
 %% FILE
 %% =============================================================
-inputVideo  = '../input/video.mp4';
-outputVideo = 'video_lane_output.mp4';
+inputVideo  = '../input/video4.mp4';
+outputVideo = 'video_lane_output4.mp4';
 
 % Pilih frame ke berapa yang mau dijadikan contoh alur proses
 frameNumber = 30;
 
 % Output gambar panel proses 1 frame
-outputImage = 'proses_1_frame_lane_detection.png';
+outputImage = 'proses_1_frame_lane_detection4.png';
 
 %% =============================================================
 %% OPSI TAMPILAN
